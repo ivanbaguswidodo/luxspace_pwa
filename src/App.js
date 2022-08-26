@@ -12,11 +12,13 @@ import Offline from './components/Offline.js';
 import Splash from './pages/Splash.js';
 import Profile from './pages/Profile.js';
 import Details from './pages/Details.js';
+import Cart from './pages/Cart.js';
 
 function App() {
   const [items, setItems] = React.useState([]);
   const [offlineStatus, setOfflineStatus] = React.useState(!navigator.onLine);
   const[isLoading, setIsLoading] = React.useState(true);
+  
 
   function handleOfflineStatus(){
     setOfflineStatus(!navigator.onLine);
@@ -72,11 +74,22 @@ function App() {
 }
 
 export default function Routes() {
+  const [cart, setcart] = React.useState([]);
+  function handleAddToCart(item){
+    const currentIndex = cart.length;
+    const newCart = [...cart, {id: currentIndex + 1, item}];
+    setCart(newCart);
+  }
   return (
     <Router>
       <Route path="/" exact component={App} />
       <Route path="/profile" exact component={Profile} />
-      <Route path="/details/:id" component={Details} />
+      <Route path="/details/:id" >
+        <Details handleAddToCart={handleAddToCart} cart={cart}/>
+        </Route>
+      <Route path="/cart">
+        <Cart cart={cart}/>
+        </Route>
     </Router>
   )
 }
